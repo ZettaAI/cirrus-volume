@@ -14,52 +14,52 @@ Aside from the rules above, CirrusVolumes should work the same way other CloudVo
 
 If you only need to read data from a volume, your workflow should not change at all.
 ```
->>> import cirrusvolume as cv
->>> v = cv.CloudVolume(cloudpath)
->>> v[bbox]
+import cirrusvolume as cv
+v = cv.CloudVolume(cloudpath)
+v[bbox]
 ```
 
 However, if you'd like to write to a CirrusVolume you'll need to add a few extra lines.
 ```
->>> v[bbox] = data
+v[bbox] = data
 #-> AssertionError: Need to define sources, motivation and process in order to write to this volume
 ```
 
 Sources describe source data for this volume. These can be a freeform justification if this volume doesn't depend on another CloudVolume
 ```
->>> sources_freeform = ['tracer annotation']
->>> sources_cloudvolume = [other_cloudpath]
+sources_freeform = ['tracer annotation']
+sources_cloudvolume = [other_cloudpath]
 ```
 
 The motivation describes a reason for creating this volume. This can be boilerplate for a processing pipeline, but can be very important for research applications.
 ```
->>> motivation = 'We go to the moon because it is hard!'
+motivation = 'We go to the moon because it is hard!'
 ```
 
 Lastly, the process specifies what you're writing/modifying and how it was generated. This consists of a description of the task (i.e., what you're currently doing), any parameters involved, and a code environment that captures the state of the code used to do it. A lot of the work of figuring out the code environment is performed by [provenance-tools](https://github.com/ZettaAI/provenance-tools).
 ```
->>> import provenancetools as pt
->>> python_github_env = pt.PythonGithubEnv('.')  # path to the github repo directory
->>> docker_env = pt.DockerEnv(imagename, tag, containerID)  # docker container metadata
+import provenancetools as pt
+python_github_env = pt.PythonGithubEnv('.')  # path to the github repo directory
+docker_env = pt.DockerEnv(imagename, tag, containerID)  # docker container metadata
 
->>> process = pt.Process('giving a demo of cirrus-volume',
-                         {'meta_level': 5},
-                         python_github_env)
+process = pt.Process('giving a demo of cirrus-volume',
+                     {'meta_level': 5},
+                     python_github_env)
 ```
 
 Once you've defined these fields, you can either pass them to the CirrusVolume when you create it, or add them as attributes later.
 ```
 # Defining the metadata at initialization
->>> write_volume = cv.CloudVolume(cloudpath,
-                                  sources=sources_cloudvolume,
-                                  motivation=motivation,
-                                  process=demo_process)
->>> write_volume[bbox] = data
+write_volume = cv.CloudVolume(cloudpath,
+                              sources=sources_cloudvolume,
+                              motivation=motivation,
+                              process=demo_process)
+write_volume[bbox] = data
 ```
 ```
 # Adding the metadata afterwards
->>> v.sources = sources_cloudvolume
->>> v.motivation = motivation
->>> v.process = demo_process
->>> v[bbox] = data
+v.sources = sources_cloudvolume
+v.motivation = motivation
+v.process = demo_process
+v[bbox] = data
 ```
