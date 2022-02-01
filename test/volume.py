@@ -1,15 +1,15 @@
 import pytest
 
 import cirrusvolume as cv
-import provenancetools as pt
+import provenancetoolbox as ptb
 
 
 SOURCES = ['tracer annotation']
 MOTIVATION = 'proper documentation is helpful'
-PROCESS = pt.Process(
+PROCESS = ptb.Process(
               'testing CirrusVolume',
               {'patience for humor': 6/10},
-              pt.process.PythonGithubEnv('.'))
+              ptb.PythonGithubEnv('.'))
 
 
 def test_creation(testcloudvolume):

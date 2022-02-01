@@ -13,5 +13,6 @@ setup(
     author='Nicholas Turner',
     author_email='nturner@zetta.ai',
     url='https://github.com/ZettaAI/cirrus-volume',
-    packages=setuptools.find_packages()
+    packages=setuptools.find_packages(),
+    install_requires=['provenance-toolbox', 'cloud-volume==8.2.0']
 )

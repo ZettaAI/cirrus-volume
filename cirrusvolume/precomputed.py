@@ -3,16 +3,16 @@ precomputed.py
 
 A wrapper for CloudVolumePrecomputed
 '''
-from typing import Optional, List, TypeVar
+from __future__ import annotations
 
+from typing import Optional
+
+import cloudvolume as cv
+import provenancetoolbox as ptb
 from cloudvolume.frontends.precomputed import CloudVolumePrecomputed
 
 from . import rules
 from .volume import register_plugin
-
-
-CloudVolume = TypeVar('CloudVolume')
-Process = TypeVar('Process')
 
 
 def register():
@@ -22,10 +22,10 @@ def register():
 class CirrusVolumePrecomputed(CloudVolumePrecomputed):
 
     def __init__(self,
-                 cloudvolume: CloudVolume,
+                 cloudvolume: cv.CloudVolume,
                  sources: Optional[List[str]] = None,
                  motivation: Optional[str] = None,
-                 process: Optional[Process] = None
+                 process: Optional[ptb.Process] = None
                  ):
         # Copying the CloudVolume attributes
         self.config = cloudvolume.config
@@ -47,6 +47,7 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
         self.process = process
 
     # Overriding all methods that allow writing to the image
+    # with versions that check the rules first
     def __setitem__(self, slices, img):
         rules.check_writing_rules(self.sources, self.motivation, self.process)
 

@@ -7,7 +7,7 @@ THE RULES
 You cannot write to a CirrusVolume unless you've passed it:
 (1) A set of sources from which this was created (e.g., another CloudVolume
 path or a freeform justification like "tracer annotation"). This must be
-formatted as a List[str], and any sources that haven't been logged previously
+formatted as a list[str], and any sources that haven't been logged previously
 will be added to the current sources field of the provenance file
 
 (2) The motivation for creating the volume (str) has been logged and you've
@@ -18,20 +18,18 @@ multiple motivation notes, and your motivation only need match one of them.
 The process will be logged unless another process with the same task
 description has already been logged. These are defined by provenance-tools.
 '''
+from __future__ import annotations
+
 import warnings
-from typing import Optional, List, TypeVar
+from typing import Optional
 
-import provenancetools as pt
-
-
-# provenance-tools.process.Process
-Process = TypeVar('Process')
-CloudVolume = TypeVar('CloudVolume')
+import cloudvolume as cv
+import provenancetoolbox as ptb
 
 
-def check_writing_rules(sources: Optional[List[str]] = None,
+def check_writing_rules(sources: Optional[list[str]] = None,
                         motivation: Optional[str] = None,
-                        process: Optional[Process] = None
+                        process: Optional[ptb.Process] = None
                         ) -> None:
     '''
     Checks whether the provided fields are sufficient to allow writing
@@ -50,11 +48,11 @@ def check_writing_rules(sources: Optional[List[str]] = None,
     assert isinstance(motivation, str)
 
     # Checking process
-    assert isinstance(process, pt.process.Process)
+    assert isinstance(process, ptb.Process)
 
 
-def add_sources(cloudvolume: CloudVolume,
-                sources: Optional[List[str]] = None
+def add_sources(cloudvolume: cv.CloudVolume,
+                sources: Optional[list[str]] = None
                 ) -> None:
     '''Documents the sources of a CloudVolume if they don't already exist'''
     currentsources = set(cloudvolume.provenance.sources)
@@ -66,7 +64,7 @@ def add_sources(cloudvolume: CloudVolume,
         cloudvolume.commit_provenance()
 
 
-def add_motivation(cloudvolume: CloudVolume,
+def add_motivation(cloudvolume: cv.CloudVolume,
                    motivation: Optional[str] = None
                    ) -> None:
     '''Documents the motivation of a CloudVolume if it doesn't already exist'''
@@ -74,8 +72,8 @@ def add_motivation(cloudvolume: CloudVolume,
         pt.add_motivation(cloudvolume, motivation)
 
 
-def add_process(cloudvolume: CloudVolume,
-                process: Optional[Process] = None
+def add_process(cloudvolume: cv.CloudVolume,
+                process: Optional[ptb.Process] = None
                 ) -> None:
     '''
     Adds the current process to the CloudVolume documentation if it doesn't
@@ -88,10 +86,10 @@ def add_process(cloudvolume: CloudVolume,
                       ' Skipping')
 
 
-def documentvolume(cloudvolume: CloudVolume,
-                   sources: Optional[List[str]] = None,
+def documentvolume(cloudvolume: cv.CloudVolume,
+                   sources: Optional[list[str]] = None,
                    motivation: Optional[str] = None,
-                   process: Optional[Process] = None
+                   process: Optional[ptb.Process] = None
                    ) -> None:
     'A single function to perform default documentation of a volume'
     add_sources(cloudvolume, sources)
