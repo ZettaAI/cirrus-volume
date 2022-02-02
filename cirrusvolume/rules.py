@@ -1,7 +1,4 @@
-'''
-rules.py
-
-A library of functions for enforcing and enacting the documentation rules.
+"""A library of functions for enforcing and enacting the documentation rules.
 
 THE RULES
 You cannot write to a CirrusVolume unless you've passed it:
@@ -17,7 +14,7 @@ multiple motivation notes, and your motivation only need match one of them.
 (3) You've passed a Process (a code environment & parameters) to the class.
 The process will be logged unless another process with the same task
 description has already been logged. These are defined by provenance-tools.
-'''
+"""
 from __future__ import annotations
 
 import warnings
@@ -31,10 +28,19 @@ def check_writing_rules(sources: Optional[list[str]] = None,
                         motivation: Optional[str] = None,
                         process: Optional[ptb.Process] = None
                         ) -> None:
-    '''
+    """Checks the rules for write-access to a CloudVolume.
+
     Checks whether the provided fields are sufficient to allow writing
     to a volume.
-    '''
+
+    Args:
+        sources: A list of descriptions for where this volume came from.
+        motivation: The motivation for creating this volume.
+        process: The process that describes the volume's creation.
+
+    Raises:
+        AssertionError: One of the write rules has been violated.
+    """
     assert all(v is not None for v in [sources, motivation, process]
                ), (""
                    "Need to define sources, motivation and process in order"
@@ -54,7 +60,12 @@ def check_writing_rules(sources: Optional[list[str]] = None,
 def add_sources(cloudvolume: cv.CloudVolume,
                 sources: Optional[list[str]] = None
                 ) -> None:
-    '''Documents the sources of a CloudVolume if they don't already exist'''
+    """Logs sources in a CloudVolume if they don't already exist.
+
+    Args:
+        cloudvolume: A CloudVolume.
+        sources: A list of cloudpaths or freeform sources.
+    """
     currentsources = set(cloudvolume.provenance.sources)
 
     newsources = currentsources.union(sources)
@@ -67,20 +78,28 @@ def add_sources(cloudvolume: cv.CloudVolume,
 def add_motivation(cloudvolume: cv.CloudVolume,
                    motivation: Optional[str] = None
                    ) -> None:
-    '''Documents the motivation of a CloudVolume if it doesn't already exist'''
-    if pt.note_absent(cloudvolume, motivation, pt.MOTIVATION):
-        pt.add_motivation(cloudvolume, motivation)
+    """Logs a motivation in a CloudVolume if it doesn't already exist.
+
+    Args:
+        cloudvolume: A CloudVolume.
+        motivation: A reason why this CloudVolume was created.
+    """
+    if ptb.note_absent(cloudvolume, motivation, ptb.NoteType.MOTIVATION):
+        ptb.add_motivation(cloudvolume, motivation)
 
 
 def add_process(cloudvolume: cv.CloudVolume,
                 process: Optional[ptb.Process] = None
                 ) -> None:
-    '''
-    Adds the current process to the CloudVolume documentation if it doesn't
-    already exist
-    '''
-    if pt.process_absent(cloudvolume, process.description):
-        pt.log_process(cloudvolume, process)
+    
+    """Logs a ptb.Process in a CloudVolume if not already logged.
+
+    Args:
+        cloudvolume: A CloudVolume.
+        process: A processing step.
+    """
+    if ptb.process_absent(cloudvolume, process):
+        ptb.log_process(cloudvolume, process)
     else:
         warnings.warn('Process with the same description already logged.'
                       ' Skipping')
@@ -91,7 +110,14 @@ def documentvolume(cloudvolume: cv.CloudVolume,
                    motivation: Optional[str] = None,
                    process: Optional[ptb.Process] = None
                    ) -> None:
-    'A single function to perform default documentation of a volume'
+    """Logs all required fields for writing to a CirrusVolume.
+
+    Args:
+        cloudvolume: A CloudVolume.
+        sources: A list of cloudpaths or freeform sources.
+        motivation: A reason why this CloudVolume was created.
+        process: A processing step.
+    """
     add_sources(cloudvolume, sources)
     add_motivation(cloudvolume, motivation)
     add_process(cloudvolume, process)

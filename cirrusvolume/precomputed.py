@@ -1,21 +1,21 @@
-'''
-precomputed.py
-
-A wrapper for CloudVolumePrecomputed
-'''
+"""A wrapper for CloudVolumePrecomputed."""
 from __future__ import annotations
 
 from typing import Optional
 
 import cloudvolume as cv
-import provenancetoolbox as ptb
 from cloudvolume.frontends.precomputed import CloudVolumePrecomputed
+import provenancetoolbox as ptb
 
 from . import rules
 from .volume import register_plugin
 
 
 def register():
+    """Registration function for CirrusVolumePrecomputed.
+
+    See volume.register_plugin for more information.
+    """
     register_plugin(CloudVolumePrecomputed, CirrusVolumePrecomputed)
 
 
@@ -23,7 +23,7 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
 
     def __init__(self,
                  cloudvolume: cv.CloudVolume,
-                 sources: Optional[List[str]] = None,
+                 sources: Optional[list[str]] = None,
                  motivation: Optional[str] = None,
                  process: Optional[ptb.Process] = None
                  ):
