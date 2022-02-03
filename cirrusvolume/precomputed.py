@@ -54,7 +54,7 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
         rules.documentvolume(self, self.sources,
                              self.motivation, self.process)
 
-        super().__setitem__(self, slices, img)
+        super().__setitem__(slices, img)
 
     def upload_from_shared_memory(self,
                                   location,
@@ -66,7 +66,7 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
         rules.documentvolume(self, self.sources,
                              self.motivation, self.process)
 
-        super().upload_from_shared_memory(self, location, bbox,
+        super().upload_from_shared_memory(location, bbox,
                                           order=order, cutout_bbox=cutout_bbox)
 
     def upload_from_file(self,
@@ -76,5 +76,5 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
         rules.documentvolume(self, self.sources,
                              self.motivation, self.process)
 
-        super().upload_from_file(self, location, bbox,
+        super().upload_from_file(location, bbox,
                                  order=order, cutout_bbox=cutout_bbox)
