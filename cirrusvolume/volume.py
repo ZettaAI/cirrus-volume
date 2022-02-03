@@ -23,7 +23,7 @@ REGISTERED_PLUGINS = dict()
 def register_plugin(key: Type[cv.CloudVolume],
                     creation_function:
                         Callable[[Type[cv.CloudVolume]],
-                                 Callable[[cv.CloudVolume], CloudVolume]
+                                 Callable[[cv.CloudVolume], CloudVolume]]
                     ) -> None:
     """Connects CloudVolume classes to CirrusVolume wrappers.
 
