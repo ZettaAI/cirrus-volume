@@ -85,7 +85,7 @@ def add_motivation(cloudvolume: cv.CloudVolume,
         motivation: A reason why this CloudVolume was created.
     """
     if ptb.note_absent(cloudvolume, motivation, ptb.NoteType.MOTIVATION):
-        ptb.add_motivation(cloudvolume, motivation)
+        ptb.addmotivation(cloudvolume, motivation)
 
 
 def add_process(cloudvolume: cv.CloudVolume,
@@ -99,7 +99,7 @@ def add_process(cloudvolume: cv.CloudVolume,
         process: A processing step.
     """
     if ptb.process_absent(cloudvolume, process):
-        ptb.log_process(cloudvolume, process)
+        ptb.logprocess(cloudvolume, process)
     else:
         warnings.warn('Process with the same description already logged.'
                       ' Skipping')
