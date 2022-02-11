@@ -41,10 +41,13 @@ def check_writing_rules(sources: Optional[list[str]] = None,
     Raises:
         AssertionError: One of the write rules has been violated.
     """
-    assert all(v is not None for v in [sources, motivation, process]
-               ), (""
-                   "Need to define sources, motivation and process in order"
-                   " to write to this volume")
+    defined = [v is not None for v in [sources, motivation, process]]
+    assert all(defined), ("Need to define sources, motivation and process in"
+                          " order to write to this volume."
+                          "\nDEFINED:"
+                          f" sources: {defined[0]}"
+                          f", motivation: {defined[1]}"
+                          f", process: {defined[2]}")
 
     # Checking sources
     assert isinstance(sources, list)
@@ -102,7 +105,7 @@ def add_process(cloudvolume: cv.CloudVolume,
         ptb.logprocess(cloudvolume, process)
     else:
         warnings.warn('Process with the same description already logged.'
-                      ' Skipping')
+                      ' Skipping logging.')
 
 
 def documentvolume(cloudvolume: cv.CloudVolume,
