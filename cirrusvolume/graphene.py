@@ -1,5 +1,4 @@
-"""A wrapper for CloudVolumeGraphene.
-"""
+"""A wrapper for CloudVolumeGraphene."""
 from __future__ import annotations
 
 import warnings
@@ -26,7 +25,18 @@ def register():
 # CloudVolumeGraphene separately to support the extra methods that are
 # declared.
 class CirrusVolumeGraphene(CloudVolumeGraphene):
+    """A wrapper for CloudVolumeGraphene.
 
+    See cloudvolume.CloudVolumeGraphene for inherited methods and
+    attributes.
+
+    Additional attributes:
+        sources: What volumes/processes were used as inputs to create this
+            volume.
+        motivation: The reason for creating or modifying this volume.
+        process: A provenancetoolbox.Process describing the modifications
+            being performed on this volume.
+    """
     def __init__(self,
                  cloudvolume: CloudVolumeGraphene,
                  sources: Optional[list[str]] = None,

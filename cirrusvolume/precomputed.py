@@ -20,7 +20,18 @@ def register():
 
 
 class CirrusVolumePrecomputed(CloudVolumePrecomputed):
+    """A wrapper for CloudVolumePrecomputed.
 
+    See cloudvolume.CloudVolumePrecomputed for inherited methods and
+    attributes.
+
+    Additional attributes:
+        sources: What volumes/processes were used as inputs to create this
+            volume.
+        motivation: The reason for creating or modifying this volume.
+        process: A provenancetoolbox.Process describing the modifications
+            being performed on this volume.
+    """
     def __init__(self,
                  cloudvolume: cv.CloudVolume,
                  sources: Optional[list[str]] = None,

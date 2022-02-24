@@ -3,17 +3,18 @@
 THE RULES
 You cannot write to a CirrusVolume unless you've passed it:
 (1) A set of sources from which this was created (e.g., another CloudVolume
-path or a freeform justification like "tracer annotation"). This must be
-formatted as a list[str], and any sources that haven't been logged previously
+path or a free-form justification like "tracer annotation"). This must be
+formatted as a list[str], and any sources that haven't been previously logged
 will be added to the current sources field of the provenance file
 
-(2) The motivation for creating the volume (str) has been logged and you've
+(2) The motivation for creating or modifying the volume (str) has been logged and you've
 included that motivation when instantiating the object. A volume can have
 multiple motivation notes, and your motivation only need match one of them.
 
 (3) You've passed a Process (a code environment & parameters) to the class.
 The process will be logged unless another process with the same task
-description has already been logged. These are defined by provenance-tools.
+description and parameters has already been logged. These are defined by
+provenancetoolbox.
 """
 from __future__ import annotations
 
