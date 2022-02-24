@@ -85,3 +85,6 @@ class CloudVolume(cv.CloudVolume):
 
         return REGISTERED_PLUGINS[type(cloudvolume)](
                    cloudvolume, sources, motivation, process)
+
+
+CirrusVolume = CloudVolume
