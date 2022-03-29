@@ -15,37 +15,42 @@ import provenancetoolbox as ptb
 
 # dummy CloudVolume information
 DUMMY_CV_PATH = "./test/test_cv"
-SOURCES = ['tracer annotation']
-MOTIVATION = 'proper documentation is helpful'
+SOURCES = ["tracer annotation"]
+MOTIVATION = "proper documentation is helpful"
 PROCESS = ptb.Process(
-              'testing CirrusVolume',
-              {'patience for humor': 6/10},
-              ptb.PythonGithubEnv('.'))
+    "testing CirrusVolume", {"patience for humor": 6 / 10}, ptb.PythonGithubEnv(".")
+)
 
 
 def make_testcloudvolume(path):
     """Makes a dummy CloudVolume"""
     num_channels = 1
-    layer_type = 'segmentation'
-    data_type = 'uint32'
-    encoding = 'raw'
+    layer_type = "segmentation"
+    data_type = "uint32"
+    encoding = "raw"
     resolution = (4, 4, 40)
     voxel_offset = (0, 0, 0)
     volume_size = (1024, 1024, 512)
     chunk_size = (64, 64, 64)
 
     info = cv.CloudVolume.create_new_info(
-               num_channels, layer_type, data_type,
-               encoding, resolution, voxel_offset,
-               volume_size, chunk_size=chunk_size)
+        num_channels,
+        layer_type,
+        data_type,
+        encoding,
+        resolution,
+        voxel_offset,
+        volume_size,
+        chunk_size=chunk_size,
+    )
 
-    vol = cv.CloudVolume(f'file://{path}', mip=0, info=info)
+    vol = cv.CloudVolume(f"file://{path}", mip=0, info=info)
 
     vol.commit_info()
 
     return vol
 
-    
+
 def removefiles(expr):
     """Removes all files specified by a glob expression"""
     filenames = glob.glob(expr)
@@ -74,8 +79,8 @@ def testcloudvolume_no_td():
 
 # Uncomment to skip teardown of the dummy CloudVolume
 # (useful to inspect the resulting files, etc.)
-#@pytest.fixture
-#def testcloudvolume(testcloudvolume_no_td):
+# @pytest.fixture
+# def testcloudvolume(testcloudvolume_no_td):
 #    return testcloudvolume_no_td
 
 
@@ -93,6 +98,8 @@ def readvolume(testcloudvolume):
 @pytest.fixture
 def readwritevolume(testcloudvolume):
     return crv.CloudVolume(
-               testcloudvolume.cloudpath, sources=SOURCES,
-               motivation=MOTIVATION, process=PROCESS
-           )
+        testcloudvolume.cloudpath,
+        sources=SOURCES,
+        motivation=MOTIVATION,
+        process=PROCESS,
+    )

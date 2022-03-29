@@ -7,13 +7,11 @@ import provenancetoolbox as ptb
 from cirrusvolume import rules
 
 
-SOURCES = ['A', 'B', 'C']
+SOURCES = ["A", "B", "C"]
 MOTIVATION = "Trying to improve"
 PROCESS = ptb.Process(
-              'testing CirrusVolume',
-              {'patience for humor': 3/10},
-              ptb.PythonGithubEnv('.')
-          )
+    "testing CirrusVolume", {"patience for humor": 3 / 10}, ptb.PythonGithubEnv(".")
+)
 
 
 class TestCheckWritingRules:
@@ -27,10 +25,10 @@ class TestCheckWritingRules:
         """Does the function raise an AssertionError with Nones."""
         with pytest.raises(AssertionError):
             rules.check_writing_rules(None, MOTIVATION, PROCESS)
-    
+
         with pytest.raises(AssertionError):
             rules.check_writing_rules(SOURCES, None, PROCESS)
-    
+
         with pytest.raises(AssertionError):
             rules.check_writing_rules(SOURCES, MOTIVATION, None)
 
@@ -39,14 +37,14 @@ class TestCheckWritingRules:
         # sources not a list of strings
         with pytest.raises(AssertionError):
             rules.check_writing_rules(0, MOTIVATION, PROCESS)
-    
+
         with pytest.raises(AssertionError):
             rules.check_writing_rules([0], MOTIVATION, PROCESS)
-    
+
         # motivation not a string
         with pytest.raises(AssertionError):
             rules.check_writing_rules(SOURCES, 0, PROCESS)
-    
+
         # process not a ptb.Process
         with pytest.raises(AssertionError):
             rules.check_writing_rules(SOURCES, MOTIVATION, 0)
@@ -80,14 +78,11 @@ class TestAddMotivation:
 
         rules.add_motivation(readvolume, MOTIVATION)
 
-        assert not ptb.note_absent(
-                       readvolume, MOTIVATION, ptb.NoteType.MOTIVATION)
+        assert not ptb.note_absent(readvolume, MOTIVATION, ptb.NoteType.MOTIVATION)
 
     def test_intersection(self, readwritevolume):
         """Are duplicate motivations written?"""
-        assert ptb.note_absent(
-                   readwritevolume, MOTIVATION, ptb.NoteType.MOTIVATION
-               )
+        assert ptb.note_absent(readwritevolume, MOTIVATION, ptb.NoteType.MOTIVATION)
 
         num_orig_notes = len(ptb.parsenotes(readwritevolume))
         rules.add_motivation(readwritevolume, MOTIVATION)
@@ -123,9 +118,8 @@ class TestAddProcess:
         assert num_new_procs == num_orig_procs + 1
 
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore')
+            warnings.simplefilter("ignore")
             rules.add_process(readwritevolume, PROCESS)
         num_newer_procs = len(readwritevolume.provenance.processing)
 
         assert num_newer_procs == num_new_procs
-
