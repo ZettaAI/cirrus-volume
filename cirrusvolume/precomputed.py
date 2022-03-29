@@ -11,7 +11,7 @@ from . import rules
 from .volume import register_plugin
 
 
-def register():
+def register() -> None:
     """Registration function for CirrusVolumePrecomputed.
 
     See volume.register_plugin for more information.
@@ -32,12 +32,14 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
         process: A provenancetoolbox.Process describing the modifications
             being performed on this volume.
     """
-    def __init__(self,
-                 cloudvolume: cv.CloudVolume,
-                 sources: Optional[list[str]] = None,
-                 motivation: Optional[str] = None,
-                 process: Optional[ptb.Process] = None
-                 ):
+
+    def __init__(
+        self,
+        cloudvolume: cv.CloudVolume,
+        sources: Optional[list[str]] = None,
+        motivation: Optional[str] = None,
+        process: Optional[ptb.Process] = None,
+    ):
         # Copying the CloudVolume attributes
         self.config = cloudvolume.config
         self.cache = cloudvolume.cache
@@ -60,32 +62,26 @@ class CirrusVolumePrecomputed(CloudVolumePrecomputed):
     # Overriding all methods that allow writing to the image
     # with versions that check the rules first
     def __setitem__(self, slices, img):
-        rules.check_writing_rules(self.sources, self.motivation, self.process)
-
-        rules.documentvolume(self, self.sources,
-                             self.motivation, self.process)
+        self.document()
 
         super().__setitem__(slices, img)
 
-    def upload_from_shared_memory(self,
-                                  location,
-                                  bbox,
-                                  order='F',
-                                  cutout_bbox=None) -> None:
+    def upload_from_shared_memory(
+        self, location, bbox, order="F", cutout_bbox=None
+    ) -> None:
+        self.document()
+
+        super().upload_from_shared_memory(
+            location, bbox, order=order, cutout_bbox=cutout_bbox
+        )
+
+    def upload_from_file(self, location, bbox, order="F", cutout_bbox=None) -> None:
+        self.document()
+
+        super().upload_from_file(location, bbox, order=order, cutout_bbox=cutout_bbox)
+
+    def document(self) -> None:
+        """Commits the CirrusVolume documentation to the provenance file."""
         rules.check_writing_rules(self.sources, self.motivation, self.process)
 
-        rules.documentvolume(self, self.sources,
-                             self.motivation, self.process)
-
-        super().upload_from_shared_memory(location, bbox,
-                                          order=order, cutout_bbox=cutout_bbox)
-
-    def upload_from_file(self,
-                         location, bbox, order='F', cutout_bbox=None) -> None:
-        rules.check_writing_rules(self.sources, self.motivation, self.process)
-
-        rules.documentvolume(self, self.sources,
-                             self.motivation, self.process)
-
-        super().upload_from_file(location, bbox,
-                                 order=order, cutout_bbox=cutout_bbox)
+        rules.documentvolume(self, self.sources, self.motivation, self.process)

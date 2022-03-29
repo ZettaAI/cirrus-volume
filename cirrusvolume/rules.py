@@ -25,10 +25,11 @@ import cloudvolume as cv
 import provenancetoolbox as ptb
 
 
-def check_writing_rules(sources: Optional[list[str]] = None,
-                        motivation: Optional[str] = None,
-                        process: Optional[ptb.Process] = None
-                        ) -> None:
+def check_writing_rules(
+    sources: Optional[list[str]] = None,
+    motivation: Optional[str] = None,
+    process: Optional[ptb.Process] = None,
+) -> None:
     """Checks the rules for write-access to a CloudVolume.
 
     Checks whether the provided fields are sufficient to allow writing
@@ -43,12 +44,14 @@ def check_writing_rules(sources: Optional[list[str]] = None,
         AssertionError: One of the write rules has been violated.
     """
     defined = [v is not None for v in [sources, motivation, process]]
-    assert all(defined), ("Need to define sources, motivation and process in"
-                          " order to write to this volume."
-                          "\nDEFINED:"
-                          f" sources: {defined[0]}"
-                          f", motivation: {defined[1]}"
-                          f", process: {defined[2]}")
+    assert all(defined), (
+        "Need to define sources, motivation and process in"
+        " order to write to this volume."
+        "\nDEFINED:"
+        f" sources: {defined[0]}"
+        f", motivation: {defined[1]}"
+        f", process: {defined[2]}"
+    )
 
     # Checking sources
     assert isinstance(sources, list)
@@ -61,9 +64,9 @@ def check_writing_rules(sources: Optional[list[str]] = None,
     assert isinstance(process, ptb.Process)
 
 
-def add_sources(cloudvolume: cv.CloudVolume,
-                sources: Optional[list[str]] = None
-                ) -> None:
+def add_sources(
+    cloudvolume: cv.CloudVolume, sources: Optional[list[str]] = None
+) -> None:
     """Logs sources in a CloudVolume if they don't already exist.
 
     Args:
@@ -79,9 +82,9 @@ def add_sources(cloudvolume: cv.CloudVolume,
         cloudvolume.commit_provenance()
 
 
-def add_motivation(cloudvolume: cv.CloudVolume,
-                   motivation: Optional[str] = None
-                   ) -> None:
+def add_motivation(
+    cloudvolume: cv.CloudVolume, motivation: Optional[str] = None
+) -> None:
     """Logs a motivation in a CloudVolume if it doesn't already exist.
 
     Args:
@@ -92,10 +95,10 @@ def add_motivation(cloudvolume: cv.CloudVolume,
         ptb.addmotivation(cloudvolume, motivation)
 
 
-def add_process(cloudvolume: cv.CloudVolume,
-                process: Optional[ptb.Process] = None
-                ) -> None:
-    
+def add_process(
+    cloudvolume: cv.CloudVolume, process: Optional[ptb.Process] = None
+) -> None:
+
     """Logs a ptb.Process in a CloudVolume if not already logged.
 
     Args:
@@ -105,15 +108,17 @@ def add_process(cloudvolume: cv.CloudVolume,
     if ptb.process_absent(cloudvolume, process):
         ptb.logprocess(cloudvolume, process)
     else:
-        warnings.warn('Process with the same description already logged.'
-                      ' Skipping logging.')
+        warnings.warn(
+            "Process with the same description already logged." " Skipping logging."
+        )
 
 
-def documentvolume(cloudvolume: cv.CloudVolume,
-                   sources: Optional[list[str]] = None,
-                   motivation: Optional[str] = None,
-                   process: Optional[ptb.Process] = None
-                   ) -> None:
+def documentvolume(
+    cloudvolume: cv.CloudVolume,
+    sources: Optional[list[str]] = None,
+    motivation: Optional[str] = None,
+    process: Optional[ptb.Process] = None,
+) -> None:
     """Logs all required fields for writing to a CirrusVolume.
 
     Args:

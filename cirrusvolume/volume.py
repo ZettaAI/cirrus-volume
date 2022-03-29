@@ -20,11 +20,12 @@ from . import rules
 REGISTERED_PLUGINS = dict()
 
 
-def register_plugin(key: Type[cv.CloudVolume],
-                    creation_function:
-                        Callable[[Type[cv.CloudVolume]],
-                                 Callable[[cv.CloudVolume], CloudVolume]]
-                    ) -> None:
+def register_plugin(
+    key: Type[cv.CloudVolume],
+    creation_function: Callable[
+        [Type[cv.CloudVolume]], Callable[[cv.CloudVolume], CloudVolume]
+    ],
+) -> None:
     """Connects CloudVolume classes to CirrusVolume wrappers.
 
     Args:
@@ -46,25 +47,31 @@ class CloudVolume(cv.CloudVolume):
         motivation: A reason why this CloudVolume was created.
         process: A processing step.
     """
-    def __new__(cls,
-                *args,
-                sources: Optional[list[str]] = None,
-                motivation: Optional[str] = None,
-                process: Optional[ptb.Process] = None,
-                **kwargs):
+
+    def __new__(
+        cls,
+        *args,
+        sources: Optional[list[str]] = None,
+        motivation: Optional[str] = None,
+        process: Optional[ptb.Process] = None,
+        **kwargs
+    ):
         cloudvolume = cv.CloudVolume(*args, **kwargs)
 
         return REGISTERED_PLUGINS[type(cloudvolume)](
-                   cloudvolume, sources, motivation, process)
+            cloudvolume, sources, motivation, process
+        )
 
     # need to re-define this here bc it automatically writes
     @classmethod
-    def from_numpy(cls,
-                   *args,
-                   sources: Optional[list[str]] = None,
-                   motivation: Optional[str] = None,
-                   process: ptb.Process = None,
-                   **kwargs):
+    def from_numpy(
+        cls,
+        *args,
+        sources: Optional[list[str]] = None,
+        motivation: Optional[str] = None,
+        process: ptb.Process = None,
+        **kwargs
+    ):
         """Create a new dataset from a numpy array.
 
         See cloudvolume.Cloudvolume for more information. Also enforces
@@ -84,7 +91,8 @@ class CloudVolume(cv.CloudVolume):
         rules.add_process(cloudvolume, process)
 
         return REGISTERED_PLUGINS[type(cloudvolume)](
-                   cloudvolume, sources, motivation, process)
+            cloudvolume, sources, motivation, process
+        )
 
 
 CirrusVolume = CloudVolume
