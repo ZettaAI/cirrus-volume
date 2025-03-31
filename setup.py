@@ -3,7 +3,7 @@ import setuptools
 from setuptools import setup, find_packages
 
 
-__version__ = '0.1.9'
+__version__ = '0.1.10'
 
 
 setup(
@@ -14,5 +14,5 @@ setup(
     author_email='nturner@zetta.ai',
     url='https://github.com/ZettaAI/cirrus-volume',
     packages=setuptools.find_packages(),
-    install_requires=['provenance-toolbox', 'cloud-volume>=8.19.3']
+    install_requires=['provenance-toolbox', 'cloud-volume>=9.1.0']
 )
