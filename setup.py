@@ -14,5 +14,5 @@ setup(
     author_email='nturner@zetta.ai',
     url='https://github.com/ZettaAI/cirrus-volume',
     packages=setuptools.find_packages(),
-    install_requires=['provenance-toolbox', 'cloud-volume>=9.1.0']
+    install_requires=['provenance-toolbox', 'cloud-volume>=12.4.0']
 )
